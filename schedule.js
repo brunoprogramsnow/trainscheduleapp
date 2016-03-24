@@ -1,22 +1,14 @@
-//Steps to complete:
-/*
-1. Create Firebase link
-2. Create button for adding new employees - then update the html + update the database
-3. Create a way to retrieve employees from the employee database.
-4. Create a way to calculate the months worked. Using difference between start and current time. Then use moment.js formatting to set difference in months.
-5. Calculate Total billed
 
-*/
-// 1. Link to Firebase
 var TrainData = new Firebase("https://brunoapp12345.firebaseio.com/");
 
-// 2. Button for adding Trains
-$("#addTrain").on("click", function(){
 
+$("#addTrain").on("click", function(){
+console.log('this sentence right here')
     // Grabs user input
     var empName = $("#trainNameInput").val().trim();
     var empRole = $("#destinationInput").val().trim();
-    var empStart = moment($("#startInput").val().trim(), "DD/MM/YY").format("X");
+    var empStart = moment($("#firstTrainInput").val().trim(), "HH:mm").format("X");
+    console.log(empStart)
     var empRate = $("#frequencyInput").val().trim(); 
 
 
@@ -71,18 +63,20 @@ TrainData.on("child_added", function(childSnapshot, prevChildKey){
     // 
     
 
-    var displayClock= moment().format('HH:MM');
-    $('#display').text('Current Time: '+ displayClock);
 
+    var displayClock= moment().format('HH:mm');
+    $('#display').text('Current Time: '+ displayClock);
 
     
     var calc= moment().diff(moment.unix(empStart),"minutes");
-    var nextArrival= moment().diff(moment.unix(empStart),"minutes") % empRate;
-    var minAway= empRate-nextArrival;
+    var  f= moment().diff(moment.unix(empStart),"minutes") % empRate;
+    var minAway= empRate-f; 
+    var nextArrival= moment(
+        ).add(minAway,'m').format('HH:mm');
 
 
     // Add each train's data into the table 
-    $("#trainTable > tbody").append("<tr><td>" + empName + "</td><td>" + empRole + "</td><td>" + empRate + "</td><td>" + nextArrival + "</td><td>" + minAway + "</td></tr>");
+    $("#trainTable").append("<tr><td>" + empName + "</td><td>" + empRole + "</td><td>" + empRate + "</td><td>" + nextArrival + "</td><td>" + minAway + "</td></tr>");
 
 });
 
